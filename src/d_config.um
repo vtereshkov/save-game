@@ -1,4 +1,4 @@
-import ("d_util.um"; /*"toml.um"*/ "th.um")
+//import "th.um"
 
 type (
   Path* = struct {
@@ -12,11 +12,12 @@ const (
 
 var (
   configData: map[str]interface{} 
-  lastTimeGot: int
+  //lastTimeGot: int
 )
 
+/*
 fn reloadSession() {
-  /*
+
   if ok, file := d_util.readFileStr("session.toml"); ok {
     result := toml.parse(file)
     if error := result.getError(); error != null {
@@ -25,7 +26,7 @@ fn reloadSession() {
       configData = result.data
     }
   }
-  */
+  
 }
 
 fn probeSessionUpdate(): bool {
@@ -35,6 +36,7 @@ fn probeSessionUpdate(): bool {
   }
   return shouldRedo
 }
+*/
 
 fn getTree*(): map[str]interface{} {
   return configData

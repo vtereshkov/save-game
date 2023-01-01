@@ -47,11 +47,11 @@ fn drawClouds*(screen: rect.Rect) {
     drawCloudStrip(scroll, yOffset, color);
   }
 }
-
+/*
 fn drawImageScaled(img: image.Image, pos: th.Vf2, scale: th.Vf2) {
   imgRocks.draw(th.Transform{p: th.Vf2{pos.x*scale.x, pos.y*scale.y}, s: scale})
 } 
-
+*/
 fn drawCave*(screen: rect.Rect, position: th.Vf2, scale: th.Vf2) {
   tileSize := imgRocks.getDims()
   scr := rect.mk(position.x, position.y, screen.w/scale.x, screen.h/scale.y)

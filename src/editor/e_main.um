@@ -11,7 +11,7 @@ import (
 
   "../mdbg.um"
   "../mshortcuts.um"
-  "../d_config.um" 
+  //"../d_config.um" 
   "../d_hashname.um"
   "../d_fps.um"
   "../d_worlddata.um"
@@ -28,15 +28,15 @@ import (
 
   th_font = "font.um"
   th_color = "color.um"
-  "../misc/mdatatree.um"
-  "../misc/mcommoncfg.um"
+  //"../misc/mdatatree.um"
+  //"../misc/mcommoncfg.um"
   "../misc/mstrings.um" 
 
   "window.um"
   "rect.um"
   "th.um"
   "image.um"
-  "canvas.um"
+  //"canvas.um"
   "input.um"
 
   "utf8.um"
@@ -44,9 +44,9 @@ import (
 )
 
 const (
-  eventMouseLeft = 0
-  eventMouseMiddle = 1
-  eventMouseRight = 2
+  //eventMouseLeft = 0
+  //eventMouseMiddle = 1
+  //eventMouseRight = 2
   eventMouseScroll = 3
   eventCount = 4
 )
@@ -963,7 +963,7 @@ fn editorPutToolbar(editor: ^Editor) {
 
     buttonRectangle := rect.mk(rectangle.x+padding, rectangle.y+padding, rectangle.h-padding*2, rectangle.h-padding*2)
 
-    if putToolbarIconButton(editor, "Play", &buttonRectangle, 1, 1, editor.isPlaying) {
+    if !editor.isPlaying/*putToolbarIconButton(editor, "Play", &buttonRectangle, 1, 1, editor.isPlaying)*/ {
       editorToggleGame(editor)
     }
 
@@ -1191,10 +1191,11 @@ fn makeRandomEntity(): d_worlddata.EntityDesc {
 /*
  * \brief Creates an entity with same name and id, empty tags
  */
+/* 
 fn makeNamedEntity(name: str): d_worlddata.EntityDesc {
   return d_worlddata.EntityDesc{name: name, id: name, tags: ""}
 }
-
+*/
 fn selectEntity(entities: ^EditorEntities, index: int) {
   entities.entitySelected = index
 }
@@ -1363,11 +1364,11 @@ fn drawTaggedEntityRect(editor: ^Editor, entity: ^d_worlddata.EntityDesc, r: rec
     editor.ctx.drawText(editor.resources.mainFont, entity.name, th.Vf2{r.x, r.y}, th.white, editor.tilemapGrid.scaling)
   }
 }
-
+/*
 fn scaleRect(r: rect.Rect, by: real): rect.Rect {
   return rect.mk(r.x*by, r.y*by, r.w*by, r.h*by)
 }
-
+*/
 fn putWorldEntities(editor: ^Editor) {
   for i in editor.entities.list {
     ent := &editor.entities.list[i]
@@ -1546,8 +1547,6 @@ fn editorPutUi(editor: ^Editor) {
     editor.ctx.moveLayer(-1)
     editor.ctx.drawCustom(WorldEditCmd{getShownLayersBitmap(editor.tilemapLayer, editor.tilemapShowAllLayers), editor.resources.toolbarIcons, tool.rect, editor.tilemapGrid, &editor.world})
     editor.ctx.moveLayer(1)
-    xy := editor.tilemapGrid.mapPos(th.Vf2{0, 0})
-
 
     events := editor.endTool()
     
@@ -1760,7 +1759,6 @@ fn editorMain*() {
     
     d_global.screen = rect.mk(0, 0, window.w, window.h)
     window.setViewport(d_global.screen.getDims())
-
 
     editorPutUi(&editor)
 

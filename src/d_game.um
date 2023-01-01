@@ -80,6 +80,7 @@ var (
   levers: map[str]bool
   saveState: SaveState
   saved: bool
+  won: bool
 
   lockInput*: bool
   guides: []rect.Rect
@@ -203,7 +204,6 @@ fn entPhysics(ent: ^Character) {
       ent.vel.y = 10
     }
   }
-  
 
   ent.rect.x += ent.vel.x*th.delta/1000.0*60.0
   ent.rect.y += ent.vel.y*th.delta/1000.0*60.0
@@ -271,17 +271,10 @@ fn entVsShape(ent: ^Character, s: Shape) {
   switch s.shape {
   case shapeLeftUpSlope:
     cornerX := ent.rect.x + ent.rect.w - r.x;
-    if cornerX > r.w {
-      cornerX = r.w
-    }
     cornerY := ent.rect.y + ent.rect.h - r.y;
     hitY := r.h - ((r.h/r.w) * (cornerX))
-    if hitY > r.h {
-      hitY = r.h
-    }
-
     
-    if cornerY > hitY {
+    if cornerX >= -2 && cornerX <= r.w + 2 && cornerY >= -2 && cornerY <= r.h + 2 && cornerY >= hitY {
       ent.vel.y = 0;
       if !ent.invertGravity {
         ent.onGround = true;
@@ -291,13 +284,10 @@ fn entVsShape(ent: ^Character, s: Shape) {
     }
   case shapeRightUpSlope:
     cornerX := ent.rect.x - r.x;
-    if cornerX < 0 {
-      cornerX = 0;
-    }
     cornerY := ent.rect.y + ent.rect.h - r.y;
     hitY := (r.h/r.w) * (cornerX)
 
-    if cornerY > hitY {
+    if cornerX >= -2 && cornerX <= r.w + 2 && cornerY >= -2 && cornerY <= r.h + 2 && cornerY >= hitY {
       ent.vel.y = 0;
       if !ent.invertGravity {
         ent.onGround = true;
@@ -307,13 +297,10 @@ fn entVsShape(ent: ^Character, s: Shape) {
     }
   case shapeLeftDownSlope:
     cornerX := ent.rect.x + ent.rect.w - r.x;
-    if cornerX > r.w {
-      cornerX = r.w
-    }
     cornerY := ent.rect.y - r.y;
     hitY := (r.h/r.w) * (cornerX)
 
-    if cornerY < hitY {
+    if cornerX >= -2 && cornerX <= r.w + 2 && cornerY >= -2 && cornerY <= r.h + 2 && cornerY <= hitY {
       if ent.invertGravity {
         ent.onGround = true;
         ent.onSlope = true;
@@ -325,13 +312,10 @@ fn entVsShape(ent: ^Character, s: Shape) {
     }
   case shapeRightDownSlope:
     cornerX := ent.rect.x - r.x;
-    if cornerX < 0 {
-      cornerX = 0;
-    }
     cornerY := ent.rect.y - r.y;
     hitY := r.h - ((r.h/r.w) * (cornerX))
 
-    if cornerY < hitY {
+    if cornerX >= -2 && cornerX <= r.w + 2 && cornerY >= -2 && cornerY <= r.h + 2 && cornerY <= hitY {
       if ent.invertGravity {
         ent.onGround = true;
         ent.onSlope = true;
@@ -353,6 +337,7 @@ fn entVsShape(ent: ^Character, s: Shape) {
     if groundCond[int(ent.invertGravity)] {
       ent.onGround = true
     }
+
     ent.rect.x += snap.x
     ent.rect.y += snap.y
   }
@@ -607,6 +592,10 @@ fn updateEntities() {
         saved = false
         dest := ent.tags.param("tele")
         mdbg.logt(dest)
+        if dest == "lv4_start" {
+          won = true
+          return
+        }
         ent := findEntity(dest)
         if ent != null {
           chara.rect.x = ent.rect.x
@@ -671,8 +660,8 @@ const (
   chumStateStand = 0
   chumStateJump = 1
   chumStateFall = 2
-  chumStateWalk = 3
-  chumStateWalk2 = 4
+  //chumStateWalk = 3
+  //chumStateWalk2 = 4
   chumFaceRect = rect.Rect{0, 0, 94, 107}
 )
 
@@ -702,7 +691,7 @@ fn drawChum(state: int) {
 }
 
 fn drawEntities() {
-  for i, entity in entities {
+  for i in entities {
     if &entities[i] == holdingEnt {
       continue
     }
@@ -753,6 +742,10 @@ fn update*() {
   // UPDATE PLAYER & CAMERA //
   updateEntities()
   cameraControl()
+
+  if won {
+    exit()
+  }
 
   power = newPower
   newPower = 0

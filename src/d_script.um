@@ -3,7 +3,7 @@
 */
 
 import ("th.um"; "rect.um"; "canvas.um";
-  "d_game.um"; "d_util.um"; "d_global.um")
+  "d_game.um"; "d_global.um")
 
 var (
   dialogActivated: bool
