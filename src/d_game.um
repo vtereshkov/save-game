@@ -440,6 +440,7 @@ fn stateLoad() {
     chara.rect.x = saveState.playerPos.x
     chara.rect.y = saveState.playerPos.y-chara.rect.h
 
+    chara.vel.y *= 0.75
     
     entSolveCollision(&chara)
     if d_util.abs(chara.rect.x-saveState.playerPos.x) > 2 || d_util.abs(chara.rect.y-(saveState.playerPos.y-chara.rect.h)) > 2 {
