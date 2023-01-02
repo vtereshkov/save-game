@@ -1703,7 +1703,7 @@ fn editorMain*() {
   std.srand(std.time())
 
   d_global.screen = rect.mk(0, 0, 800, 600)
-  window.setup("Editor", trunc(d_global.screen.w), trunc(d_global.screen.h))
+  window.setup("Game Demo", trunc(d_global.screen.w), trunc(d_global.screen.h))
 
 
   mdbg.initConsole()
@@ -1764,6 +1764,8 @@ fn editorMain*() {
 
     editor.resources.mainFont.draw(sprintf("%dfps", trunc(d_fps.getFps())), th.Vf2{0, 1}, th.black)
     editor.resources.mainFont.draw(sprintf("%dfps", trunc(d_fps.getFps())), th.Vf2{0, 0}, th.white)
+
+    editor.resources.mainFont.draw(sprintf("Arrows - Move\nA/S - Load/Save Position\nSpace - Use Object"), th.Vf2{0, 30}, th.white)
 
     mdbg.drawConsole(editor.resources.mainFont)
   }
