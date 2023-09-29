@@ -2047,9 +2047,11 @@ fn editorMain*(enabled: bool) {
       drawShadowText(editor.resources.mainFont, sprintf("%dfps", trunc(d_fps.getFps())), th.Vf2{0, 1})
     }
 
-    drawShadowText(editor.resources.mainFont, sprintf("%d frameskip", trunc(d_game.frameSkips)), th.Vf2{0, 0+16})
-    drawShadowText(editor.resources.mainFont, sprintf("%s", editor.dirty ? "Dirty" : "Not Dirty"), th.Vf2{0, 0+32})
-    drawShadowText(editor.resources.mainFont, sprintf("v0.2.1"), th.Vf2{0, 0+48})
+    if editor.enabled {
+      drawShadowText(editor.resources.mainFont, sprintf("%d frameskip", trunc(d_game.frameSkips)), th.Vf2{0, 0+16})
+      drawShadowText(editor.resources.mainFont, sprintf("%s", editor.dirty ? "Dirty" : "Not Dirty"), th.Vf2{0, 0+32})
+      drawShadowText(editor.resources.mainFont, sprintf("v0.2.1"), th.Vf2{0, 0+48})
+    }
   })
 
   window.onDestroy.register(|editor| {
