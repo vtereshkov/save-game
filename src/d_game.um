@@ -1,4 +1,4 @@
-import ("th.um"; "rect.um"; "canvas.um"; "input.um"; "image.um"
+import ("th.um"; "rect.um"; "canvas.um"; "input.um"; "image.um"; "audio.um"
   "misc/mstrings.um"; "mdbg.um";
   th_color = "color.um";
   "d_rerp.um"; "d_background.um"; "d_resources.um"; 
@@ -105,6 +105,10 @@ var (
   touchTimer: real
   ended: bool
   frameSkips*: int
+
+  toggleOnSound: audio.Sound
+  toggleOffSound: audio.Sound
+  teleportSound: audio.Sound
 )
 
 fn getCameraRect(): rect.Rect {
@@ -493,6 +497,15 @@ fn start*(worldData: d_worlddata.WorldData) {
   saves = []ChumState{}
   camera = getCameraProperties().pos
   cameraScale = getCameraProperties().scale
+
+  toggleOnSound = audio.load("data/sounds/on.wav")
+  toggleOnSound.setVol(0.6)
+
+  toggleOffSound = audio.load("data/sounds/off.wav")
+  toggleOffSound.setVol(0.6)
+
+  teleportSound = audio.load("data/sounds/tele.wav")
+  teleportSound.setVol(0.6)  
 }
 
 fn init*(rl: ^d_resources.ResourceLoader) {
@@ -835,6 +848,11 @@ fn update*() {
         if d_util.rectVsRect(ent.rect, chara.rect) {
           if input.isJustPressedc(' ') {
             if canActivateLever() {
+              if toggleActive {
+                toggleOffSound.play()
+              } else {
+                toggleOnSound.play()
+              }
               toggleActive = !toggleActive
             }
           } 
@@ -844,6 +862,11 @@ fn update*() {
         if d_util.rectVsRect(ent.rect, chara.rect) {
           if input.isJustPressedc(' ') {
             if canActivateStaticLever() {
+              if toggleActive {
+                toggleOffSound.play()
+              } else {
+                toggleOnSound.play()
+              }              
               toggleActiveStatic = !toggleActiveStatic
             }
           } 
@@ -860,6 +883,7 @@ fn update*() {
             if !entCheckCollision(ent) {
               chara.rect.x = ent.rect.x
               chara.rect.y = ent.rect.y
+              teleportSound.play()
               input.clearc(' ')
             } 
           }
