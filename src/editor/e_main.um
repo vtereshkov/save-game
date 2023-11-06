@@ -1891,7 +1891,7 @@ fn loadEditorResources(rl: ^d_resources.ResourceLoader): EditorResources {
     bevelImage: d_resources.loadImage(rl, "data/img/ui_bevelbutton.png"),
     tilesetImage: d_resources.loadImage(rl, "data/img/ts_sky.png"),
     toolbarIcons: d_resources.loadImage(rl, "data/img/ui_trayicons.png"),
-    superHotFire: d_resources.loadImage(rl, "data/img/SUPER HOT FIRE WTF.png"),
+    superHotFire: d_resources.loadImage(rl, "data/img/SUPER_HOT_FIRE_WTF.png"),
     mainFont: d_resources.loadFont(rl, "data/font/monospace.ttf", 16, 0)}
  
   editorResources.tilesetImage.setfilter(1)
@@ -2035,7 +2035,7 @@ fn editorMain*(enabled: bool) {
     
 
 
-    d_global.screen = rect.mk(0, 0, window.w, window.h)
+    d_global.screen = rect.mk(0, 0, d_util.clamp(window.w, 0, window.h * 4.0 / 3.0), window.h)
     window.setViewport(d_global.screen.getDims())
 
     editorPutUi(editor)
